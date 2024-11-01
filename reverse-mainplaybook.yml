@@ -1,0 +1,28 @@
+---
+- hosts: localhost  # put localhost.  We are processing against aws
+  connection: local  # put local.  We are processing against aws
+  gather_facts: False  # don't gather facts against localhost
+  vars:
+    aws_access_key: "{{ aws_id }}" # Hidden in the vault
+    aws_secret_key: "{{ aws_key }}" # Hidden in the vaul
+    vpc_name: "{{ vpc_title }} VPC"
+    igw_name: "{{ vpc_title }} IGW"
+    subnet_name: "{{ vpc_title }} Subnet" 
+    acl_name: "{{ vpc_title }} ACL"
+    security_group_name: "{{ vpc_title }} Security Group"
+    route_table_name: "{{ vpc_title }} route table"
+    vpcCidrBlock: '10.0.0.0/16'
+    subNetCidrBlock: '10.0.1.0/24'
+    port22CidrBlock: '0.0.0.0/0'
+    destinationCidrBlock: '0.0.0.0/0'
+    state: 'absent'
+  roles:
+    - create_VPC_route_table
+    - create_VPC_subnet
+    - create_VPC_net
+
+
+
+
+   
+   

@@ -1,0 +1,17 @@
+---
+  - name: create ec2 instance
+    amazon.aws.ec2:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      vpc_id: "{{ ec2_vpc_net_result.vpc.id }}"
+      region: "{{ region }}"
+      state: "{{ state }}"
+
+      key_name: mykey
+      instance_type: t2.micro
+      image: ami-123456
+      wait: yes
+      group: "{{ security_group_name }}"
+      count: 3
+      vpc_subnet_id: "{{  subnet_result.subnet.id  }}"
+      assign_public_ip: no

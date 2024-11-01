@@ -1,0 +1,8 @@
+/bin
+/lib
+/lib64
+/share
+/include
+pyvenv.cfg
+group_vars/all/vault.yml
+vault_kasyan_me.yml

@@ -1,0 +1,22 @@
+---
+  - name: create ec2 VPC public subnet route table
+    # create route table and connect subnet to routes
+    ec2_vpc_route_table:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      vpc_id: "{{ ec2_vpc_net_result.vpc.id }}"
+      region: "{{ region }}"
+      state: "{{ state }}"
+      tags:
+        Name: "{{ route_table_name }}"
+      subnets: [ "{{ subnet_result.subnet.id }}" ]      
+      # create routes
+      routes:
+        - dest: "{{ destinationCidrBlock }}" 
+          gateway_id: "{{ igw_result.gateway_id }}"
+    register: public_route_table
+    
+  - name: print out new vpc, subnet id, and security group for vpc
+    # print out new subnet id and security group
+    debug:
+      msg: "To use the new created VPC: {{ vpc_name }}; Use subnet id: {{ subnet_result.subnet.id }} and security group: {{ security_group_results.group_id }} to create your AWS instances "

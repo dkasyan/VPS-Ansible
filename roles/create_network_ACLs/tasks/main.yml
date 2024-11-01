@@ -1,0 +1,35 @@
+  - name: create ec2 VPC Network access control list
+    # create the access control list with ingress and egress ports 
+    ec2_vpc_nacl:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      vpc_id: "{{ ec2_vpc_net_result.vpc.id }}"
+      region: "{{ region }}"
+      state: "{{ state }}"
+      name: "{{ acl_name }}"
+      subnets: [ "{{ subnet_result.subnet.id }}" ]
+      tags:
+        Name: "{{ acl_name }}"
+        Description: "{{ acl_name }}"
+      # ingress acl rules
+      ingress:
+        # rule no, protocol, allow/deny, cidr, icmp_type, icmp_code, port from, port to
+        # allow ingress port 22
+        - [100, 'tcp', 'allow', "{{ destinationCidrBlock }}", null, null, 22, 22]
+        # allow ingress port 80
+        - [200, 'tcp', 'allow', "{{ destinationCidrBlock }}", null, null, 80, 80]
+        # allow icmp
+        - [300, 'icmp', 'allow', "{{ destinationCidrBlock }}", 0, 8]
+        # allow ingress ephemeral ports
+        - [400, 'tcp', 'allow', "{{ destinationCidrBlock }}", null, null, 1024, 65535]
+      # egress acl rules
+      egress:
+        # rule no, protocol, allow/deny, cidr, icmp_type, icmp_code, port from, port to
+        # allow egres port 22 
+        - [100, 'tcp', 'allow', "{{ destinationCidrBlock }}", null, null, 22, 22]
+        # allow egres port 80 
+        - [200, 'tcp', 'allow', "{{ destinationCidrBlock }}", null, null, 80, 80]
+        # allow egress ephemeral ports
+        - [300, 'tcp', 'allow', "{{ destinationCidrBlock }}", null, null, 1024, 65535]
+    register: acl_results
+    
